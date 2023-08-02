@@ -9,59 +9,62 @@
     <div class="card card-outline card-secondary">
         <div class="card-body">
             <table class="table table-striped table-hover table-bordered">
-                <th>No</th>
-                <th>Nama</th>
-                <th>Kelas</th>
-                <th>Ket</th>
+                <thead>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Kelas</th>
+                    <th>Ket</th>
+                </thead>
+            
+
+                <tbody>
+                    @foreach ($data as $item)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{$item->namasiswa}}</td>
+                        <td>{{$item->namakelas}}</td>
+                        @php
+                            $ket = DB::table('absen')->where('nis', $item->nis)
+                            ->where('tanggalabsen', date('Y-m-d'));
+                            if($ket->count() > 0) {
+                                $ket = $ket->first()->ket;
+                            }else {
+                                $ket = 'Alfa';
+                            }
+                        @endphp
+                        <td>
+                            <form action="{{ route('absen.absen', [$item->nis]) }}" method="post">
+                                @csrf
+                                <select name='ket' id='forket' onchange="submit()" class="form-control rounded-0 @if ($ket=='Hadir')
+                                    bg-success
+                                @elseif ($ket=='Izin')
+                                    bg-secondary
+                                @elseif ($ket=='Sakit')
+                                    bg-warning
+                                @elseif ($ket=='Alfa')
+                                    bg-danger
+                                @endif">
+                                    <option value='Hadir' @if ($ket=='Hadir')
+                                        selected
+                                    @endif>Hadir</option>
+                                    <option value='Izin' @if ($ket=='Izin')
+                                        selected
+                                    @endif>Izin</option>
+                                    <option value='Sakit' @if ($ket=='Sakit')
+                                        selected
+                                    @endif>Sakit</option>
+                                    <option value='Alfa' @if ($ket=='Alfa')
+                                        selected
+                                    @endif>Alfa</option>
+                                <select>
+
+                            </form>
+                        </td>
+                    </tr>
+
+                    @endforeach
+                </tbody>
             </table>
-
-            <tbody>
-                @foreach ($data as $item)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{$item->namasiswa}}</td>
-                    <td>{{$item->namakelas}}</td>
-                    @php
-                        $ket = DB::table('absen')->where('nis', $item->nis)
-                        ->where('tanggalabsen', date('Y-m-d'));
-                        if($ket->count() > 0) {
-                            $ket = $ket->first()->ket;
-                        }else {
-                            $ket = 'Alfa';
-                        }
-                    @endphp
-                    <td>
-                        <form action="{{ route('absen.absen', [$item->nis]) }}" method="post">
-                            @csrf
-                            <select name='ket' id='forket' onchange="submit()" class="form-control rounded-0 @if ($ket=='Hadir')
-                                bg-success
-                            @elseif ($ket=='Izin')
-                                bg-secondary
-                            @elseif ($ket=='Sakit')
-                                bg-warning
-                            @elseif ($ket=='Alfa')
-                                bg-danger
-                            @endif">
-                                <option value='Hadir' @if ($ket=='Hadir')
-                                    selected
-                                @endif>Hadir</option>
-                                <option value='Izin' @if ($ket=='Izin')
-                                    selected
-                                @endif>Izin</option>
-                                <option value='Sakit' @if ($ket=='Sakit')
-                                    selected
-                                @endif>Sakit</option>
-                                <option value='Alfa' @if ($ket=='Alfa')
-                                    selected
-                                @endif>Alfa</option>
-                            <select>
-
-                        </form>
-                    </td>
-                </tr>
-
-                @endforeach
-            </tbody>
         </div>
 
     </div>
