@@ -70,6 +70,7 @@ class absenC extends Controller
         return view('absenSiswa', [
             'data' => $data,
             'kelas' => $kelas,
+            'keyword' => $keyword,
         ]);
 
     }
