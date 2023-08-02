@@ -15,8 +15,8 @@
                         <div class="input-group mb-3">
                             <form action="{{ url()->current() }}" method="get">
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+                                    <input type="text" class="form-control" placeholder="Recipient's username" name="keyword" aria-label="Recipient's username" value="{{ $keyword }}" aria-describedby="button-addon2">
+                                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">cari</button>
                                   </div>
                             </form>
                           </div>
