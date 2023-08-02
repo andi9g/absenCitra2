@@ -8,8 +8,7 @@
 <div class="container">
     <div class="row">
         @foreach ($kelas as $item)
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-body text-center">
                     @php
@@ -29,7 +28,6 @@
             </div>
 
         </div>
-        <div class="col-md-3"></div>
 
         @endforeach
     </div>
