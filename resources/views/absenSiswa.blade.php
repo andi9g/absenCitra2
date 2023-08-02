@@ -18,7 +18,7 @@
             <tbody>
                 @foreach ($data as $item)
                 <tr>
-                    <td>{{ $loop->iteration + $data->firstItem() - 1 }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{$item->namasiswa}}</td>
                     <td>{{$item->namakelas}}</td>
                     @php
