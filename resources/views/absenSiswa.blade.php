@@ -14,10 +14,10 @@
                     <div class="col-md-5">
                         <div class="input-group mb-3">
                             <form action="{{ url()->current() }}" method="get">
-                                <input type="text" class="form-control" placeholder="Masukan nama" value="{{ $keyword }}" name="keyword" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                <div class="input-group-append">
-                                  <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Cari</button>
-                                </div>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+                                  </div>
                             </form>
                           </div>
                     </div>
