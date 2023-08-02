@@ -53,12 +53,16 @@ class absenC extends Controller
 
     public function data(Request $request, $idkelas)
     {
+
+        $keyword = empty($request->keyword)?"":$request->keyword;
         if(Auth::user()->idposisi == 2 || Auth::user()->idposisi == 3){
-            $data = Siswa::where('idkelas', $idkelas)->orderBy('namasiswa', 'asc')->get();
+            $data = Siswa::where('idkelas', $idkelas)->orderBy('namasiswa', 'asc')
+            ->where('namasiswa', 'like', "%$keyword%")->get();
         }else {
             $email = Auth::user()->email;
             $idkelas = Siswa::where('email', $email)->first()->idkelas;
-            $data = Siswa::where('idkelas', $idkelas)->orderBy('namasiswa', 'asc')->get();
+            $data = Siswa::where('idkelas', $idkelas)->orderBy('namasiswa', 'asc')
+            ->where('namasiswa', 'like', "%$keyword%")->get();
         }
 
         $kelas = Kelas::where('idkelas',$idkelas)->first();
