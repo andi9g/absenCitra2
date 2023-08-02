@@ -21,7 +21,7 @@
                                     <div class="modal-body">
                                         <div class='form-group'>
                                             <label for='fornis' class='text-capitalize'>NIS</label>
-                                            <input type='text' name='nis' id='fornis' class='form-control' placeholder='masukan nis'>
+                                            <input type='number' name='nis' id='fornis' class='form-control' placeholder='masukan nis'>
                                         </div>
 
                                         <div class='form-group'>
