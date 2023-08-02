@@ -74,10 +74,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ url('gambar/images.png', []) }}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ url('gambar/profile', [Auth::user()->avatar]) }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="{{ url('/', []) }}" class="d-block">{{Auth::user()->name}}</a>
+          <a href="{{ url('profile') }}" class="d-block">{{Auth::user()->name}}</a>
         </div>
       </div>
 
@@ -106,6 +106,7 @@
               </p>
             </a>
           </li>
+          
           @if (Auth::user()->idposisi == 3)
           <li class="nav-item">
             <a href="{{ url('siswa', []) }}" class="nav-link @yield('warnasiswa')">
@@ -131,12 +132,23 @@
             <a href="{{ url('absen', []) }}" class="nav-link @yield('warnaabsen')">
               <i class="nav-icon fas fa-check"></i>
               <p>
-                Data Absen
+                Absensi
               </p>
             </a>
           </li>
 
-          @if (Auth::user()->idposisi == 3)
+          @if (Auth::user()->idposisi == 3 || Auth::user()->idposisi == 2 )
+          <li class="nav-item">
+            <a href="{{ url('dataabsen', []) }}" class="nav-link @yield('warnadataabsen')">
+              <i class="nav-icon fas fa-calendar"></i>
+              <p>
+                Data Absensi
+              </p>
+            </a>
+          </li>
+          @endif
+
+          @if (Auth::user()->idposisi == 3 )
 
           <li class="nav-item">
             <hr class="bg-secondary">

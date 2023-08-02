@@ -21,9 +21,12 @@ Route::middleware(['auth'])->group(function () {
         return redirect('home');
     });
 
-    // Route::get('pdf', 'startController@pdf');
+    Route::get('/home', 'homeC@home');
 
-    // Route::get('siswa/export/', 'startController@export');
+    Route::get('profile', 'profileC@profile');
+    Route::post('profile/ubah', 'profileC@ubah')->name('profile.ubah');
+    Route::post('profile/password', 'profileC@password')->name('profile.password');
+    Route::post('profile/gambar', 'profileC@gambar')->name('profile.gambar');
 
     Route::middleware(['GerbangSuperadmin'])->group(function () {
         Route::get('laporan', 'laporanC@index');
@@ -54,11 +57,12 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
 
     Route::get('absen', 'absenC@tampil')->middleware('GerbangGuru');
+    Route::get('dataabsen', 'absenC@dataabsen')->middleware('GerbangGuru');
     Route::get('absen/{idkelas}', 'absenC@data');
     Route::post('absen/{nis}', 'absenC@absen')->name('absen.absen');
 

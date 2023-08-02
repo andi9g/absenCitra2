@@ -21,6 +21,36 @@ class absenC extends Controller
         ]);
     }
 
+    public function dataabsen(Request $request)
+    {
+
+        $tanggal = empty($request->tanggal)?date('Y-m-d'):date('Y-m-d',strtotime($request->tanggal));
+        $keyword = empty($request->keyword)?"":$request->keyword;
+        
+        $absensi = Absen::join('siswa', 'siswa.nis', 'absen.nis')
+        ->join('kelas', 'kelas.idkelas', 'siswa.idkelas')
+        ->where('absen.tanggalabsen', $tanggal)
+        ->where(function ($query) use ($keyword, $tanggal){
+            $query->where('siswa.nis', 'like', "$keyword%")
+            ->where('siswa.namasiswa', 'like', "%$keyword%");
+        })
+        ->select('siswa.namasiswa', 'kelas.namakelas', 'absen.*')
+        ->latest()->paginate(15);
+
+        $absensi->appends($request->all());
+
+        // dd(url()->full());
+
+
+        return view('dataabsensi', [
+            'absensi' => $absensi,
+            'tanggal' => $tanggal,
+            'keyword' => $keyword,
+        ]);
+    }
+
+    
+
     public function data(Request $request, $idkelas)
     {
         if(Auth::user()->idposisi == 2 || Auth::user()->idposisi == 3){

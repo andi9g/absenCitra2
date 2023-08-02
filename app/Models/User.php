@@ -22,6 +22,7 @@ class User extends Authenticatable
         'idposisi',
         'email',
         'password',
+        'avatar',
     ];
 
     public function posisi()
