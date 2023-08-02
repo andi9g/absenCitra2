@@ -148,8 +148,7 @@
           </li>
           @endif
 
-          @if (Auth::user()->idposisi == 3 )
-
+          @if (Auth::user()->idposisi == 3 || Auth::user()->idposisi == 2)
           <li class="nav-item">
             <hr class="bg-secondary">
             <a href="{{ url('laporan', []) }}" class="nav-link @yield('warnalaporan')">
@@ -159,6 +158,10 @@
               </p>
             </a>
           </li>
+
+          @endif
+          @if (Auth::user()->idposisi == 3 )
+          
 
           <li class="nav-item">
             <hr class="bg-secondary">
