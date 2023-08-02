@@ -29,8 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('profile/gambar', 'profileC@gambar')->name('profile.gambar');
 
     Route::middleware(['GerbangSuperadmin'])->group(function () {
-        Route::get('laporan', 'laporanC@index');
-        Route::get('cetak/laporan', 'laporanC@cetak')->name('cetak');
+        
 
         Route::resource('siswa', 'siswaC');
         Route::post('reset/siswa/{id}', 'siswaC@reset')->name('siswa.reset');
@@ -60,6 +59,8 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
+    Route::get('laporan', 'laporanC@index')->middleware('GerbangGuru');
+        Route::get('cetak/laporan', 'laporanC@cetak')->name('cetak')->middleware('GerbangGuru');
 
     Route::get('absen', 'absenC@tampil')->middleware('GerbangGuru');
     Route::get('dataabsen', 'absenC@dataabsen')->middleware('GerbangGuru');
