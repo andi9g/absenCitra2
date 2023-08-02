@@ -10,11 +10,11 @@
         <div class="card-body">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-8"></div>
-                    <div class="col-md-4">
+                    <div class="col-md-7"></div>
+                    <div class="col-md-5">
                         <div class="input-group mb-3">
                             <form action="{{ url()->current() }}" method="get">
-                                <input type="text" class="form-control" placeholder="Masukan nama" value="$keyword" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <input type="text" class="form-control" placeholder="Masukan nama" value="{{ $keyword }}" name="keyword" aria-label="Recipient's username" aria-describedby="button-addon2">
                                 <div class="input-group-append">
                                   <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Cari</button>
                                 </div>
