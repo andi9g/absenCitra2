@@ -8,6 +8,7 @@ use App\Models\Absen;
 use App\Models\Mapel;
 use Carbon\Carbon;
 use PDF;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
