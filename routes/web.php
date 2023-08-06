@@ -66,6 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dataabsen', 'absenC@dataabsen')->middleware('GerbangGuru');
     Route::get('absen/{idkelas}', 'absenC@data');
     Route::post('absen/{nis}', 'absenC@absen')->name('absen.absen');
+    Route::post('sinkron/absen/{idkelas}', 'absenC@sinkron')->name('absen.mapel.guru')->middleware('GerbangGuru');;
 
 
 

@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Absen;
+use App\Models\User;
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Models\Absenguru;
+use App\Models\Mapel;
+use App\Models\Guru;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -67,11 +71,63 @@ class absenC extends Controller
 
         $kelas = Kelas::where('idkelas',$idkelas)->first();
 
+        $mapel = [];
+        if(Auth::user()->idposisi == 2) {
+            $mapel = Mapel::join('guru', 'guru.idmapel', 'mapel.idmapel')
+            ->where('guru.email', Auth::user()->email)
+            ->select("mapel.idmapel", 'mapel.namamapel')->get();
+        }
+
         return view('absenSiswa', [
             'data' => $data,
             'kelas' => $kelas,
             'keyword' => $keyword,
+            'mapel' => $mapel,
         ]);
+
+    }
+
+    public function sinkron(Request $request, $idkelas)
+    {
+        $idguru = Guru::where('email', Auth::user()->email)->first()->idguru;
+        // dd($idguru);
+        $idmapel = $request->mapel;
+        $idkelas = $idkelas;
+        $tanggal = date("Y-m-d", strtotime($request->tanggal));
+
+
+        $data = Absen::join('siswa', 'siswa.nis', 'absen.nis')
+        ->where('absen.tanggalabsen', $tanggal)
+        ->select('absen.*')
+        ->get();
+
+        foreach ($data as $absen) {
+            $cek = Absenguru::where('idabsen', $absen->idabsen)
+            ->where('idguru', $idguru)
+            ->count();
+            
+            if($cek === 0){
+                $tambah = new Absenguru;
+                $tambah->idguru = $idguru;
+                $tambah->idmapel = $idmapel;
+                $tambah->idabsen = $absen->idabsen;
+                $tambah->nis = $absen->nis;
+                $tambah->ket = $absen->ket;
+                $tambah->tanggalabsen = $absen->tanggalabsen;
+                $tambah->created_at = $absen->created_at;
+                $tambah->save();
+                return redirect()->back()->with('toast_success', 'Sinkron berhasil');
+            }else {
+                Absenguru::where('idabsen', $absen->idabsen)
+                ->where('tanggalabsen', $tanggal)
+                ->update([
+                    'ket' => $absen->ket,
+                ]);
+                return redirect()->back()->with('toast_success', 'Sinkron berhasil');
+            }
+        }
+        return redirect()->back()->with('toast_success', 'Tidak ada data disinkonkan');
+
 
     }
 

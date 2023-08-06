@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Siswa;
 use App\Models\Kelas;
 use App\Models\Absen;
+use App\Models\Mapel;
 use Carbon\Carbon;
 use PDF;
 use Illuminate\Http\Request;
@@ -19,9 +20,14 @@ class laporanC extends Controller
      */
     public function index()
     {
+        
+        $mapel = Mapel::join('guru', 'guru.idmapel', 'mapel.idmapel')
+        ->select('mapel.idmapel', 'mapel.namamapel')->get();
+
         $kelas = Kelas::get();
         return view('laporan',[
             'kelas' => $kelas,
+            'mapel' => $mapel,
         ]);
     }
 
@@ -43,6 +49,12 @@ class laporanC extends Controller
             }
         }
 
+        if(empty($request->mapel)) {
+            $mapel = "";
+        }else {
+            $mapel = "Pelajaran ".Mapel::where('idmapel', $request->mapel)->first()->namamapel;
+        }
+
         // $tanggalawal = Carbon::parse($awal);
         // $tanggalakhir = Carbon::parse($akhir);
         // $selisihhari = $tanggalawal->diffInDays($tanggalakhir);
@@ -56,6 +68,7 @@ class laporanC extends Controller
             ->where('siswa.idkelas', $kls->idkelas)
             ->select('siswa.*', 'kelas.namakelas')
             ->get();
+
             $dataSiswa = [];
             foreach ($siswa as $sis) {
 
@@ -64,13 +77,27 @@ class laporanC extends Controller
                 for ($i=$awal; $i <= $akhir; $i = $i + strtotime("+1 days",strtotime($i))) {
                     $tanggal = date('Y-m-d', $i);
                     $hari = Carbon::parse(date('Y-m-d', $i))->isoFormat('dddd');
-                    if ($hari !== "Minggu") {
-                        $absen = Absen::join('siswa', 'siswa.nis', 'absen.nis')
-                        ->join('kelas', 'siswa.idkelas', 'kelas.idkelas')
-                        ->where('siswa.idkelas', $kls->idkelas)
-                        ->where('siswa.nis', $sis->nis)
-                        ->where('absen.tanggalabsen', $tanggal)
-                        ->select('absen.ket');
+                    if ($hari !== "Minggu" && $hari !== "Sabtu") {
+                        
+                        if(Auth::user()->idposisi == 2) {
+
+                            $absen = Absen::join('siswa', 'siswa.nis', 'absen.nis')
+                            ->join('kelas', 'siswa.idkelas', 'kelas.idkelas')
+                            ->join('absenguru', 'absenguru.idabsen', 'absen.idabsen')
+                            ->where('siswa.idkelas', $kls->idkelas)
+                            ->where('siswa.nis', $sis->nis)
+                            ->where('absenguru.tanggalabsen', $tanggal)
+                            ->where('absenguru.idmapel', $request->mapel)
+                            ->select('absenguru.ket');
+                        }else {
+                            $absen = Absen::join('siswa', 'siswa.nis', 'absen.nis')
+                            ->join('kelas', 'siswa.idkelas', 'kelas.idkelas')
+                            ->where('siswa.idkelas', $kls->idkelas)
+                            ->where('siswa.nis', $sis->nis)
+                            ->where('absen.tanggalabsen', $tanggal)
+                            ->select('absen.ket');
+                        }
+                        
 
 
                         if($absen->count() > 0) {
@@ -105,6 +132,7 @@ class laporanC extends Controller
             'tglHari' => $tglHari,
             'awal' => $awal,
             'akhir' => $akhir,
+            'mapel' => $mapel,
         ])->setPaper('A4','lanscape');
 
         return $pdf->stream('laporan.pdf');

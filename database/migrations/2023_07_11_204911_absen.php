@@ -102,6 +102,17 @@ class Absen extends Migration
             $table->date('tanggalabsen');
             $table->timestamps();
         });
+
+        Schema::create('absenguru', function (Blueprint $table) {
+            $table->bigIncrements('idabsenguru');
+            $table->integer('idguru');
+            $table->integer('idmapel');
+            $table->integer('idabsen');
+            $table->integer('nis');
+            $table->enum('ket', ['Alfa', 'Hadir', 'Izin', 'Sakit']);
+            $table->date('tanggalabsen');
+            $table->timestamps();
+        });
     }
 
     /**

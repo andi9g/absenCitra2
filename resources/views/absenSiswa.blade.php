@@ -10,7 +10,51 @@
         <div class="card-body">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-7"></div>
+                    <div class="col-md-7">
+                        @if (Auth::user()->idposisi == 2)
+                            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#sinkronkan">Sinkronkan</button>
+
+                            <div id="sinkronkan" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="my-modal-title">Title</h5>
+                                            <button class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form action="{{ route('absen.mapel.guru', [$kelas->idkelas]) }}" method="post">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <label for="">Mata Pelajaran</label>
+                                                <select name="mapel" required class="form-control" id="">
+                                                    @foreach ($mapel as $item)
+                                                        <option value="{{ $item->idmapel }}">{{ $item->namamapel }}</option>
+                                                    @endforeach
+                                                </select>
+
+                                                <div class="form-group">
+                                                    <label for="idkelas">Kelas</label>
+                                                    <input id="idkelas" disabled readonly class="form-control" type="text" name="" value="{{ $kelas->namakelas }}">
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label for="tanggal">Tanggal</label>
+                                                    <input id="tanggal" class="form-control" type="date" name="tanggal" value="{{ date('Y-m-d') }}">
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-success">Proses Sinkron</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        @endif
+
+                    </div>
                     <div class="col-md-5">
                         <div class="input-group mb-3">
                             <form action="{{ url()->current() }}" method="get">

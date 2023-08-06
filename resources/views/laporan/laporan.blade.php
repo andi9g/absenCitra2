@@ -57,7 +57,9 @@
                 <br>
                 <h1>SMPN 5 TANJUNGPINANG</h1>
                 <p>Jl. Ir. H. Juanda No. 3, Bukit Bestari, Tj. Pinang Timur, Kec. Bukit Bestari, Kota Tanjung Pinang, Kepulauan Riau</p>
-                <h3>Laporan Kehadiran</h3>
+                <h3>Laporan Kehadiran @if ($mapel != "")
+                    | {{ $mapel }}
+                @endif</h3>
             </td>
         </tr>
     </table>

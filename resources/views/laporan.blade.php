@@ -35,6 +35,18 @@
                                 @endforeach
                             <select>
                         </div>
+
+                        @if (Auth::user()->idposisi == 2)
+                        <div class="form-group">
+                            <label for="mapel">Mata Pelajaran</label>
+                            <select id="mapel" class="form-control" name="mapel">
+                                @foreach ($mapel as $item)
+                                    <option value="{{ $item->idmapel }}">{{ $item->namamapel }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                            
+                        @endif
                     </div>
                     <div class="card-footer text-right">
                         <button type="submit" class="btn btn-success">
