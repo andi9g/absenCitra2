@@ -21,7 +21,7 @@ class laporanC extends Controller
      */
     public function index()
     {
-        
+
         $mapel = Mapel::join('guru', 'guru.idmapel', 'mapel.idmapel')
         ->select('mapel.idmapel', 'mapel.namamapel')->get();
 
@@ -79,7 +79,7 @@ class laporanC extends Controller
                     $tanggal = date('Y-m-d', $i);
                     $hari = Carbon::parse(date('Y-m-d', $i))->isoFormat('dddd');
                     if ($hari !== "Minggu" && $hari !== "Sabtu") {
-                        
+
                         if(Auth::user()->idposisi == 2) {
 
                             $absen = Absen::join('siswa', 'siswa.nis', 'absen.nis')
@@ -98,7 +98,7 @@ class laporanC extends Controller
                             ->where('absen.tanggalabsen', $tanggal)
                             ->select('absen.ket');
                         }
-                        
+
 
 
                         if($absen->count() > 0) {
@@ -127,6 +127,7 @@ class laporanC extends Controller
         }
 
         $dataColect = collect($dataKelas);
+        // dd($dataColect);
 
         $pdf = PDF::loadView('laporan.laporan', [
             'data' => $dataColect,

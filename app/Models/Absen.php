@@ -10,7 +10,7 @@ class Absen extends Model
     use HasFactory;
     protected $primaryKey="idabsen";
     protected $table="absen";
-    protected $guarded = [];
+    protected $fillable = ["nis", "ket", "tanggalabsen"];
 
 
     public function siswa()

@@ -25,18 +25,50 @@ class absenC extends Controller
         ]);
     }
 
+
+
+    public function tambahabsen(Request $request)
+    {
+        $request->validate([
+            "nis" => "required|numeric",
+            "ket" => "required",
+            "tanggalabsen" => "required|date",
+        ]);
+
+        try{
+            $cek = Absen::where("nis", $request->nis)->where("tanggalabsen", $request->tanggalabsen);
+
+            $keterangan = "ditambahkan";
+            if($cek->count() > 0) {
+                $cek->first()->update([
+                    "ket" => $request->ket,
+                ]);
+                $keterangan = "di Ubah";
+            }else {
+                Absen::create(
+                    $request->all(),
+                );
+            }
+
+            return redirect()->back()->with("success", "Data berhasil $keterangan");
+
+        }catch(\Throwable $th){
+            return redirect()->back()->with('toast_error', 'Terjadi kesalahan ');
+        }
+    }
+
     public function dataabsen(Request $request)
     {
 
         $tanggal = empty($request->tanggal)?date('Y-m-d'):date('Y-m-d',strtotime($request->tanggal));
         $keyword = empty($request->keyword)?"":$request->keyword;
-        
+
         $absensi = Absen::join('siswa', 'siswa.nis', 'absen.nis')
         ->join('kelas', 'kelas.idkelas', 'siswa.idkelas')
         ->where('absen.tanggalabsen', $tanggal)
-        ->where(function ($query) use ($keyword, $tanggal){
-            $query->where('siswa.nis', 'like', "$keyword%")
-            ->where('siswa.namasiswa', 'like', "%$keyword%");
+        ->when($keyword, function($query, $keyword) {
+            $query->where('siswa.nis', 'like', "%$keyword%")
+            ->orWhere('siswa.namasiswa', 'like', "%$keyword%");
         })
         ->select('siswa.namasiswa', 'kelas.namakelas', 'absen.*')
         ->latest()->paginate(15);
@@ -44,16 +76,19 @@ class absenC extends Controller
         $absensi->appends($request->all());
 
         // dd(url()->full());
+        $siswa = Siswa::select("nis", "namasiswa")->get();
+
 
 
         return view('dataabsensi', [
             'absensi' => $absensi,
             'tanggal' => $tanggal,
             'keyword' => $keyword,
+            'siswa' => $siswa,
         ]);
     }
 
-    
+
 
     public function data(Request $request, $idkelas)
     {
@@ -105,7 +140,7 @@ class absenC extends Controller
             $cek = Absenguru::where('idabsen', $absen->idabsen)
             ->where('idguru', $idguru)
             ->count();
-            
+
             if($cek === 0){
                 $tambah = new Absenguru;
                 $tambah->idguru = $idguru;

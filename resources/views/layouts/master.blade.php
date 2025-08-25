@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   @yield('mystyle')
 </head>
 <body class="hold-transition sidebar-mini layout-fixed text-sm">
@@ -106,7 +107,7 @@
               </p>
             </a>
           </li>
-          
+
           @if (Auth::user()->idposisi == 3)
           <li class="nav-item">
             <a href="{{ url('siswa', []) }}" class="nav-link @yield('warnasiswa')">
@@ -161,7 +162,7 @@
 
           @endif
           @if (Auth::user()->idposisi == 3 )
-          
+
 
           <li class="nav-item">
             <hr class="bg-secondary">
@@ -260,9 +261,11 @@
 <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard.js"></script>
 @include('sweetalert::alert')
+@yield('jsku')
 </body>
 </html>
